@@ -1,0 +1,60 @@
+{
+  "fixed_creation_competitors": [
+    {"name": "Douyin", "aliases": ["抖音", "Douyin Lite", "抖音极速版"], "watch_frequency": "weekly"},
+    {"name": "TikTok", "aliases": ["TikTok Lite"], "watch_frequency": "weekly"},
+    {"name": "CapCut", "aliases": ["剪映"], "watch_frequency": "weekly"},
+    {"name": "Xiaohongshu", "aliases": ["小红书", "RED"], "watch_frequency": "weekly"},
+    {"name": "Instagram", "aliases": ["Reels", "Edits"], "watch_frequency": "weekly"},
+    {"name": "YouTube", "aliases": ["Shorts", "YouTube Create"], "watch_frequency": "weekly"},
+    {"name": "Snapchat", "aliases": ["Spotlight", "Lens Studio"], "watch_frequency": "weekly"},
+    {"name": "Facebook", "aliases": ["Facebook Reels"], "watch_frequency": "weekly"},
+    {"name": "X", "aliases": ["Twitter", "Grok"], "watch_frequency": "weekly"},
+    {"name": "Kwai", "aliases": ["Kuaishou", "快手", "快手极速版"], "watch_frequency": "weekly"},
+    {"name": "Likee", "aliases": ["SnackVideo"], "watch_frequency": "weekly"},
+    {"name": "Canva", "aliases": [], "watch_frequency": "biweekly"},
+    {"name": "Adobe", "aliases": ["Adobe Express", "Premiere mobile"], "watch_frequency": "biweekly"},
+    {"name": "Captions", "aliases": [], "watch_frequency": "biweekly"},
+    {"name": "VN", "aliases": ["InShot"], "watch_frequency": "biweekly"}
+  ],
+  "fixed_consumption_competitors": [
+    {"name": "Douyin", "aliases": ["抖音", "Douyin Lite", "抖音极速版"], "watch_frequency": "weekly"},
+    {"name": "TikTok", "aliases": ["TikTok Lite"], "watch_frequency": "weekly"},
+    {"name": "Xiaohongshu", "aliases": ["小红书", "RED"], "watch_frequency": "weekly"},
+    {"name": "Instagram", "aliases": ["Reels", "Explore"], "watch_frequency": "weekly"},
+    {"name": "YouTube", "aliases": ["Shorts"], "watch_frequency": "weekly"},
+    {"name": "Snapchat", "aliases": ["Stories", "Spotlight", "Discover"], "watch_frequency": "weekly"},
+    {"name": "Facebook", "aliases": ["Reels", "Watch", "Groups"], "watch_frequency": "weekly"},
+    {"name": "X", "aliases": ["For You", "Video", "Spaces"], "watch_frequency": "weekly"},
+    {"name": "Kwai", "aliases": ["Kuaishou", "快手"], "watch_frequency": "weekly"},
+    {"name": "Likee", "aliases": ["SnackVideo"], "watch_frequency": "weekly"},
+    {"name": "Lemon8", "aliases": [], "watch_frequency": "biweekly"},
+    {"name": "Reddit", "aliases": [], "watch_frequency": "monthly"},
+    {"name": "Threads", "aliases": [], "watch_frequency": "monthly"}
+  ],
+  "emerging_categories": {
+    "creation": [
+      "AI video generation",
+      "AI image-to-video",
+      "auto vlog",
+      "friend co-creation",
+      "meme remix",
+      "camera and filter apps",
+      "avatar apps",
+      "captioning and voiceover",
+      "livestream clipping"
+    ],
+    "consumption": [
+      "friend feed",
+      "private circle social",
+      "campus social",
+      "short drama",
+      "interactive drama",
+      "AI companion",
+      "voice room",
+      "party game social",
+      "search-led lifestyle content",
+      "meme community",
+      "anonymous community"
+    ]
+  }
+}

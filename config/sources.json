@@ -1,0 +1,38 @@
+{
+  "app_store_sources": [
+    "Google Play top charts",
+    "Apple App Store top charts",
+    "App Store product pages",
+    "Google Play product pages"
+  ],
+  "data_platform_sources": [
+    "Sensor Tower",
+    "data.ai",
+    "Similarweb",
+    "Qimai",
+    "DianDian",
+    "QuestMobile",
+    "AppGrowing"
+  ],
+  "news_sources": [
+    "TechCrunch",
+    "The Verge",
+    "Business Insider",
+    "SCMP",
+    "Rest of World",
+    "36Kr",
+    "LatePost",
+    "人人都是产品经理",
+    "量子位"
+  ],
+  "social_sources": [
+    "TikTok",
+    "Instagram",
+    "X",
+    "Reddit",
+    "YouTube",
+    "Xiaohongshu",
+    "Douyin",
+    "Discord communities"
+  ]
+}

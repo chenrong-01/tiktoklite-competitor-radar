@@ -1,0 +1,14 @@
+{
+  "tier_1_business_relevance": {
+    "Southeast Asia": ["Indonesia", "Thailand", "Vietnam", "Philippines", "Malaysia"],
+    "Latin America": ["Brazil", "Mexico", "Colombia", "Argentina", "Chile"],
+    "South Asia": ["India ecosystem", "Pakistan", "Bangladesh"],
+    "Middle East": ["Saudi Arabia", "United Arab Emirates", "Turkey", "Egypt"],
+    "Japan and Korea": ["Japan", "South Korea"]
+  },
+  "tier_2_trend_source": {
+    "North America": ["United States", "Canada"],
+    "Europe": ["United Kingdom", "France", "Germany", "Spain", "Italy"],
+    "Oceania": ["Australia"]
+  }
+}
