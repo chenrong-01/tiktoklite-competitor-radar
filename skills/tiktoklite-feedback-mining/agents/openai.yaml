@@ -1,4 +1,0 @@
-interface:
-  display_name: "TikTok Lite Feedback Mining"
-  short_description: "Mine TikTok Lite user voice and feature-related feedback"
-  default_prompt: "Use $tiktoklite-feedback-mining to summarize recent TikTok Lite feedback and user voice around creation, posting, and consumption."
