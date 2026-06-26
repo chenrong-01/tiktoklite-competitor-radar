@@ -141,7 +141,10 @@ async def capture_targets(targets: list[ScreenshotTarget], timeout_ms: int, wait
 
     async with async_playwright() as playwright:
         browser = await playwright.chromium.launch()
-        page = await browser.new_page(viewport={"width": 1440, "height": 1600})
+        context = await browser.new_context(
+            viewport={"width": 1440, "height": 1600}, ignore_https_errors=True
+        )
+        page = await context.new_page()
         for target in targets:
             output_path = ROOT / screenshot_path_for_target(target)
             output_path.parent.mkdir(parents=True, exist_ok=True)

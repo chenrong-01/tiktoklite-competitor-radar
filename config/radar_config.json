@@ -1,0 +1,122 @@
+{
+  "_comment": "Central tunable knobs for the 5-layer radar (recall / pre-rank / rank / watchpool / output). Edit values here for quick adjustments without touching code. Reverting is as simple as changing a number back.",
+
+  "form_taxonomy": {
+    "_comment": "L2/L3 relevance gate. A candidate passes if it matches ANY of the four forms. Matched as whole-word tokens (or multi-word substrings) on the lowercased title/app name.",
+    "creation": [
+      "create", "creator", "editing", "editor", "edit", "camera", "filter", "lens",
+      "template", "caption", "captions", "voiceover", "dub", "remix", "clip", "clipping",
+      "vlog", "avatar", "ai video", "image-to-video", "text-to-video", "generate", "generative",
+      "publish", "upload", "record", "shoot", "studio", "effects", "sticker", "watermark"
+    ],
+    "content": [
+      "feed", "discovery", "discover", "explore", "search", "recommendation", "for you",
+      "short video", "shorts", "reels", "stories", "drama", "microdrama", "companion",
+      "community", "social", "chat", "voice room", "live", "livestream", "interaction",
+      "repost", "share", "trending", "viral", "swipe", "scroll", "retention"
+    ],
+    "tool": [
+      "downloader", "download", "watermark remover", "remover", "converter", "compress",
+      "utility", "workflow", "automation", "scheduler", "analytics", "subtitle", "transcribe",
+      "translate", "enhancer", "upscale", "background remover"
+    ]
+  },
+
+  "commercialization_terms": {
+    "_comment": "L2/L3 commercialization filter. Includes monetization AND incentive/growth (per decision: incentives are also excluded). For the REGULAR competitor line, any hit => drop. For the EMERGING line => keep but annotate. Form gate still applies to emerging.",
+    "monetization": [
+      "e-commerce", "ecommerce", "live shopping", "live commerce", "shopping ads",
+      "shoppable", "checkout", "virtual card", "payment", "payments", "ad revenue",
+      "advertising", "affiliate", "in-app purchase", "paid subscription", "subscription",
+      "creator marketplace", "marketplace", "monetization", "monetize", "crypto", "digital money"
+    ],
+    "incentive": [
+      "coins", "rewards", "reward", "cash", "watch to earn", "watch-to-earn", "earn money",
+      "earn cash", "reward task", "daily check-in", "check-in", "referral", "invite bonus",
+      "cashback", "金币", "现金", "奖励", "签到", "邀请返现", "返现", "激励"
+    ]
+  },
+
+  "hard_exclude_terms": {
+    "_comment": "L2 only-kill-obvious-garbage list. These are ALWAYS dropped on both lines (truly off-topic / non-product noise). Kept deliberately narrow so pre-rank does NOT do rank's job.",
+    "terms": [
+      "sports betting", "dfs", "first lady", "politician", "scam", "apple watch"
+    ]
+  },
+
+  "priority_weights": {
+    "_comment": "L2 scoring (NOT kill switches). A candidate is always kept as review; these only set priority=high vs low so the agent triages high first.",
+    "named_fixed_competitor": 3,
+    "strong_change_term": 2,
+    "ranking_breadth_per_market": 1,
+    "official_source_domain": 2,
+    "high_threshold": 3
+  },
+
+  "strong_change_terms": [
+    "launch", "launches", "launched", "rollout", "rolls out", "rolling out",
+    "new feature", "introduces", "introducing", "adds", "adding", "test", "testing",
+    "expands", "expanding", "update", "redesign", "ships", "debut", "unveils"
+  ],
+
+  "ranking_noise": {
+    "_comment": "L2 ranking de-noise (emerging line only). Developer/utility tools and mature incumbents are dropped from store-ranking candidates.",
+    "dev_tool_terms": [
+      "ssh", "vpn", "shell", "ide", "terminal", "code editor", "coding", "code app",
+      "compiler", "git", "developer", "app store connect", "apps connect", "replit",
+      "railway", "python", "userscript", "userscripts", "proxy", "claude code",
+      "scriptable", "testflight", "github", "expo go", "plist", "totp", "koder",
+      "a-shell", "ish shell", "localdevvpn", "device monitor", "freecash"
+    ],
+    "mature_ranking_apps": [
+      "tiktok", "douyin", "capcut", "instagram", "threads", "youtube", "facebook",
+      "messenger", "whatsapp", "telegram", "snapchat", "reddit", "x ", "twitter",
+      "wechat", "weixin", "line", "kakaotalk", "band -", "netflix", "disney",
+      "spotify", "amazon", "prime video", "hbo", "max:", "hulu", "peacock",
+      "paramount", "google", "gmail", "chrome", "gallery", "photos", "lightroom", "picsart"
+    ]
+  },
+
+  "confidence_model": {
+    "_comment": "L3 cross-verification (agent applies). Confidence A/B/C/D drives keep/drop per line.",
+    "regular_line_accept": ["A", "B"],
+    "emerging_line_accept": ["A", "B", "C"],
+    "drop": ["D"],
+    "definitions": {
+      "A": "Official source confirms the signal (official blog, exec post, in-product visible).",
+      "B": "No direct official confirmation, but >=2 INDEPENDENT domains report it AND all trace back to the official source. Independence = dedup by domain, anti-transclusion, anti-same-source-rumor.",
+      "C": "Single/unconfirmed source. Regular line: drop. Emerging line: admit into watchpool for early observation.",
+      "D": "Same-source transcription / pure rumor / mutually-copied with no traceable origin. Always drop."
+    }
+  },
+
+  "watchpool": {
+    "_comment": "L4 watchpool (emerging line only). Cross-week tracking list.",
+    "capacity": 10,
+    "cold_weeks_to_exit": 2,
+    "enabled": true
+  },
+
+  "media_capture": {
+    "_comment": "L5 visual asset policy for regular-competitor new features. Reuse pages already visited in L3 first; only do a targeted re-search when none found; if no animated demo exists, use a static screenshot placeholder (no in-product recording unless user explicitly asks).",
+    "prefer_order": ["official_demo_gif_video", "media_hands_on_gif_video", "in_product_or_media_screenshot", "static_screenshot_placeholder"],
+    "allow_in_product_recording": false,
+    "gif_max_chars": 14000000,
+    "gif_max_bytes": 10485760,
+    "gif_compress": {"max_width": 540, "frame_step": 3, "colors": 128}
+  },
+
+  "source_priority": {
+    "_comment": "L5 citation pick when many sites report the same feature. Primary = official; secondary fills detail gaps. Never use aggregator/entertainment sites as primary.",
+    "official_domains": [
+      "instagram.com", "about.instagram.com", "about.fb.com", "blog.youtube",
+      "snap.com", "newsroom.snap.com", "blog.google", "x.com", "blog.x.com",
+      "tiktok.com", "newsroom.tiktok.com"
+    ],
+    "authoritative_media": [
+      "techcrunch.com", "theverge.com", "fastcompany.com", "engadget.com",
+      "9to5google.com", "9to5mac.com", "androidpolice.com", "socialmediatoday.com",
+      "restofworld.org", "wired.com"
+    ]
+  }
+}

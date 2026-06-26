@@ -147,12 +147,21 @@ def item_to_candidate(
 
 
 def is_relevant_news_item(item: dict[str, str], query_type: str | None = None) -> bool:
+    """L1 recall gate — recall-first: only drop OBVIOUS garbage.
+
+    The old gate required the title to contain a RELEVANT_TERMS whitelist token
+    (and, for emerging, an EMERGING_PRODUCT_TERMS token). That whitelist acted as
+    a kill-switch at the recall stage and is exactly why real signals (e.g. the
+    Fast Company "Multiple Captions" report) were dropped before the agent ever
+    saw them. Per the five-layer design, recall must NOT judge to death — the
+    pre-rank (scoring) and rank (agent cross-verification) layers do the
+    filtering. So here we only drop items matching the explicit garbage phrase
+    list; everything else is recalled.
+    """
     title = item.get("title", "").lower()
     if any(phrase in title for phrase in IRRELEVANT_PHRASES):
         return False
-    if query_type == "emerging_product" and not any(term in title for term in EMERGING_PRODUCT_TERMS):
-        return False
-    return any(term in title for term in RELEVANT_TERMS)
+    return True
 
 
 def load_queries(path: Path) -> dict[str, list[str]]:

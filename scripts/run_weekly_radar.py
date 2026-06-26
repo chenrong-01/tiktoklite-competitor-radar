@@ -41,10 +41,27 @@ def load_sources_and_screenshots(week: str) -> tuple[list[dict[str, str]], list[
         for row in csv.DictReader(file):
             if row.get("week") != week:
                 continue
-            if row.get("source_url"):
-                sources.append({"title": row.get("app", "source"), "url": row["source_url"]})
-            if row.get("screenshot_path"):
-                screenshots.append({"label": row.get("app", "screenshot"), "path": row["screenshot_path"]})
+            app = row.get("app", "source")
+            region = row.get("region", "")
+            source_url = row.get("source_url", "")
+            if source_url:
+                sources.append({"title": app, "url": source_url})
+            if row.get("media_path") or row.get("screenshot_path"):
+                media_path = row.get("media_path") or row.get("screenshot_path")
+                media_type = row.get("media_type") or ("screenshot" if row.get("screenshot_path") else "")
+                # Bind each visual asset to its product so the publishing layer can
+                # place it inside that product block without downgrading GIF/video
+                # media to a generic screenshot.
+                screenshots.append(
+                    {
+                        "label": f"{app} · {region}".strip(" ·"),
+                        "app": app,
+                        "region": region,
+                        "anchor_source_url": source_url,
+                        "path": media_path,
+                        "type": media_type,
+                    }
+                )
     return sources, screenshots
 
 
@@ -66,6 +83,7 @@ def write_feishu_json(
 
 
 def generate_reports(week: str) -> tuple[Path, Path]:
+    run_command([sys.executable, "scripts/process_media.py", "validate-signals", "--signals", "data/signals.csv", "--week", week])
     run_command([sys.executable, "scripts/generate_report.py", "--week", week])
     markdown_path = REPORT_DIR / f"{week}.md"
     markdown = markdown_path.read_text(encoding="utf-8")
@@ -99,9 +117,9 @@ def main() -> None:
                 "--week",
                 week,
                 "--limit-per-query",
-                "1",
+                "3",
                 "--days",
-                "7",
+                "10",
             ],
             continue_on_failure=True,
         )
@@ -129,7 +147,61 @@ def main() -> None:
             ],
             continue_on_failure=True,
         )
+        run_command(
+            [
+                sys.executable,
+                "scripts/collect_app_store_categories.py",
+                "--week",
+                week,
+                "--countries",
+                "us",
+                "gb",
+                "jp",
+                "kr",
+                "br",
+                "mx",
+                "id",
+                "th",
+                "vn",
+                "ph",
+                "--genres",
+                "social",
+                "photo_video",
+                "entertainment",
+                "--limit",
+                "10",
+            ],
+            continue_on_failure=True,
+        )
+        run_command(
+            [
+                sys.executable,
+                "scripts/collect_google_play_rankings.py",
+                "--week",
+                week,
+                "--countries",
+                "us",
+                "gb",
+                "jp",
+                "kr",
+                "br",
+                "mx",
+                "id",
+                "th",
+                "vn",
+                "ph",
+                "--genres",
+                "social",
+                "video_players",
+                "photography",
+                "entertainment",
+                "--limit",
+                "10",
+            ],
+            continue_on_failure=True,
+        )
         run_command([sys.executable, "scripts/build_candidate_pool.py", "--week", week], continue_on_failure=True)
+        run_command([sys.executable, "scripts/update_watchpool.py", "--week", week], continue_on_failure=True)
         if not args.skip_screenshots:
             run_command(
                 [

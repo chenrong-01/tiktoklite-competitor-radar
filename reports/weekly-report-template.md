@@ -10,6 +10,8 @@ For each signal, include:
 - Type: regular competitor or emerging product
 - Track: creation, consumption, or both
 - What changed
+- Product detail (emerging products): what it is, its features, how to use it
+- Feature detail (regular competitors): web-researched explanation of the feature
 - Why it matters
 - TikTok Lite implication
 - Priority

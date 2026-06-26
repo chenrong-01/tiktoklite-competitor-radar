@@ -147,21 +147,79 @@ python3 scripts/generate_codex_digest.py --week 2026-W24 --print
 
 The digest uses absolute local image paths, so captured screenshots can render directly in Codex responses. This is the best output when you want the weekly radar presented in the thread instead of opening report files manually.
 
+## L1-L6 Workflow
+
+This skill is now structured as an end-to-end weekly radar workflow:
+
+1. **L1 Recall** — collect multi-region news plus App Store and Google Play category rankings.
+2. **L2 Pre-rank** — split regular-competitor vs emerging lines, filter obvious garbage, score candidates, and keep reviewable signals.
+3. **L3 Rank / curation** — research candidate signals, cross-check confidence, deduplicate against prior reports, and write curated rows into `data/signals.csv`.
+4. **L4 Watchpool** — track emerging products across weeks and surface heating/cooling trends.
+5. **L5 Report & Feishu Doc** — render Markdown and Feishu-ready payloads with GIF/video-first media validation.
+6. **L6 Lark Publish** — after confirmation, publish a rich-text post single-message summary with top GIF-backed findings and the full Feishu report link.
+
+## Feishu Document Workflow
+
+The radar owns the report content and Feishu-ready payload; it does not vendor Feishu/Lark document tooling or credentials.
+
+Expected L5 outputs:
+
+- `reports/weekly/<week>.md`: full Markdown report.
+- `reports/feishu/<week>.json`: Feishu-ready payload containing title, markdown, sources, and screenshot/media metadata.
+
+Use the execution environment's Feishu document integration to create the final document from the payload. See `docs/feishu-doc-workflow.md`.
+
+## Lark Publishing Workflow
+
+For weekly group distribution, use a **rich-text post single message** rather than raw interactive card JSON when multiple GIF demos are required. The validated structure is:
+
+```text
+Title: TikTok Lite Competitor Radar · <date range>
+
+本周重点
+
+[GIF 1]
+1. <feature title>
+<one-line explanation>
+
+[GIF 2]
+2. <feature title>
+<one-line explanation>
+
+[GIF 3]
+3. <feature title>
+<one-line explanation>
+
+查看完整报告（含来源截图）
+```
+
+Always preview and confirm the target, content, and style before sending. See `docs/lark-publish-workflow.md` and `docs/release-checklist.md`.
+
 ## Project Structure
 
 ```text
 config/
   competitors.json
   markets.json
-  sources.json
+  news_queries.json
+  radar_config.json
 data/
   signals.csv
+  watchpool.csv
 docs/
   radar-methodology.md
+  feishu-doc-workflow.md
+  lark-publish-workflow.md
+  release-checklist.md
 reports/
   weekly-report-template.md
   weekly/
+  feishu/
 scripts/
+  run_weekly_radar.py
+  build_candidate_pool.py
+  update_watchpool.py
+  process_media.py
   generate_report.py
 assets/
   screenshots/

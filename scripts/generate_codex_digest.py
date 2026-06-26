@@ -41,12 +41,22 @@ class Signal:
     radar_type: str
     category: str
     signal: str
+    feature_detail: str
+    product_overview: str
     why_it_matters: str
     tiktok_lite_implication: str
     priority: str
     source_url: str
     screenshot_path: str
     status: str
+    # L5 additions (backward-compatible: default to "" when absent in old CSVs).
+    line: str = ""
+    form: str = ""
+    confidence: str = ""
+    media_path: str = ""
+    media_type: str = ""
+    cite_primary: str = ""
+    cite_secondary: str = ""
 
     @classmethod
     def from_row(cls, row: dict[str, str]) -> "Signal":
@@ -95,17 +105,28 @@ def sort_signals(signals: list[Signal]) -> list[Signal]:
 
 
 def image_markdown(root: Path, screenshot_path: str, alt: str) -> str:
-    if not screenshot_path:
+    return media_markdown(root, screenshot_path, "screenshot", alt)
+
+
+def media_markdown(root: Path, media_path: str, media_type: str, alt: str) -> str:
+    if not media_path:
         return ""
-    absolute_path = root / screenshot_path
+    absolute_path = root / media_path
     if not absolute_path.exists():
         return ""
+    if media_type == "video":
+        return f"[▶ {alt} — demo video]({absolute_path})"
     return f"![{alt}]({absolute_path})"
+
+
+def _multiline(text: str) -> list[str]:
+    parts = [part.strip() for part in text.split("\n") if part.strip()]
+    return parts if parts else [text]
 
 
 def render_signal(root: Path, signal: Signal) -> str:
     source = f"[source]({signal.source_url})" if signal.source_url else "source missing"
-    image = image_markdown(root, signal.screenshot_path, signal.app)
+    image = media_markdown(root, signal.media_path or signal.screenshot_path, signal.media_type or "screenshot", signal.app)
     priority = PRIORITY_TITLES.get(signal.priority.lower(), signal.priority)
     lines = [
         f"### {signal.app} · {signal.region}",
@@ -115,16 +136,36 @@ def render_signal(root: Path, signal: Signal) -> str:
         f"**发生了什么**  ",
         signal.signal,
         "",
-        f"**为什么重要**  ",
-        signal.why_it_matters,
-        "",
-        f"**对 TikTok Lite 的启发**  ",
-        signal.tiktok_lite_implication,
-        "",
-        f"**来源**  ",
-        source,
-        "",
     ]
+    is_emerging = signal.radar_type == "emerging"
+    detail_blocks = []
+    if is_emerging:
+        if signal.product_overview:
+            detail_blocks.append(("产品详解（是什么 / 功能 / 怎么用）", signal.product_overview))
+        if signal.feature_detail:
+            detail_blocks.append(("功能详解", signal.feature_detail))
+    else:
+        if signal.feature_detail:
+            detail_blocks.append(("功能详解", signal.feature_detail))
+        if signal.product_overview:
+            detail_blocks.append(("产品详解（是什么 / 功能 / 怎么用）", signal.product_overview))
+    for label, text in detail_blocks:
+        lines.append(f"**{label}**  ")
+        lines.extend(_multiline(text))
+        lines.append("")
+    lines.extend(
+        [
+            f"**为什么重要**  ",
+            signal.why_it_matters,
+            "",
+            f"**对 TikTok Lite 的启发**  ",
+            signal.tiktok_lite_implication,
+            "",
+            f"**来源**  ",
+            source,
+            "",
+        ]
+    )
     if image:
         lines.extend([image, ""])
     return "\n".join(lines)
@@ -207,7 +248,9 @@ def render_digest(root: Path, week: str, signals: list[Signal], evidence_items: 
     else:
         lines.extend(["本周暂无进入正式报告的发现。", ""])
 
-    inline_screenshot_paths = {signal.screenshot_path for signal in signals if signal.screenshot_path}
+    inline_screenshot_paths = {
+        signal.media_path or signal.screenshot_path for signal in signals if signal.media_path or signal.screenshot_path
+    }
     gallery = render_evidence_gallery(root, evidence_items, inline_screenshot_paths)
     lines.extend(["## 附加截图", ""])
     if gallery:

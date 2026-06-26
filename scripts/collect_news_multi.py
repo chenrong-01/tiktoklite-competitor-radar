@@ -40,8 +40,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Collect news candidates for multiple locales.")
     parser.add_argument("--week", required=True, help="Week key, for example 2026-W25")
     parser.add_argument("--locales", nargs="*", default=DEFAULT_LOCALES, help="Locale specs like US:en JP:ja")
-    parser.add_argument("--limit-per-query", type=int, default=1)
-    parser.add_argument("--days", type=int, default=7)
+    parser.add_argument("--limit-per-query", type=int, default=3)
+    parser.add_argument("--days", type=int, default=10)
     args = parser.parse_args()
 
     script = ROOT / "scripts" / "collect_news_rss.py"

@@ -40,6 +40,8 @@ class GenerateCodexDigestTests(unittest.TestCase):
             radar_type="emerging",
             category="auto vlog",
             signal="Auto-stitches tiny daily clips.",
+            feature_detail="",
+            product_overview="是什么：朋友共拍 vlog。功能：自动拼接。怎么用：每小时拍 2 秒。",
             why_it_matters="Low-pressure creation.",
             tiktok_lite_implication="Watch auto-vlog creation.",
             priority="medium",
@@ -56,6 +58,7 @@ class GenerateCodexDigestTests(unittest.TestCase):
         self.assertIn("## 新兴产品", digest)
         self.assertIn("### Setlog · South Korea", digest)
         self.assertIn("Watch auto-vlog creation.", digest)
+        self.assertIn("产品详解", digest)
         self.assertIn("**来源**", digest)
         self.assertIn("[source](https://example.com)", digest)
         self.assertIn("## 附加截图", digest)
@@ -101,6 +104,8 @@ class GenerateCodexDigestTests(unittest.TestCase):
                 radar_type="emerging",
                 category="auto vlog",
                 signal="Auto-stitches tiny daily clips.",
+                feature_detail="",
+                product_overview="",
                 why_it_matters="Low-pressure creation.",
                 tiktok_lite_implication="Watch auto-vlog creation.",
                 priority="medium",
